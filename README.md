@@ -1,4 +1,3 @@
-# Hahow-Hw
 我的 react native 作業練習區
 
 # how to start
