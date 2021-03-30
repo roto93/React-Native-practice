@@ -1,9 +1,7 @@
 // hw6 FlatList
 
-import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { StyleSheet, Text, TextInput, View, TouchableOpacity, Image, FlatList } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { createStackNavigator } from '@react-navigation/stack'
 import { NavigationContainer } from '@react-navigation/native'
 import ListScreen from './src/screen/ListScreen.js'

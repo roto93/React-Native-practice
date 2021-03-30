@@ -3,7 +3,6 @@ import { View, StyleSheet, Text, FlatList, Image, TouchableOpacity } from 'react
 import { SafeAreaView } from 'react-native-safe-area-context'; // react-native 裡的 SafeAreaView 沒作用，必須用這個
 import HORO_DATA from '../component/HORO_DATA'
 import Modal from 'react-native-modal'
-import { PanResponder } from 'react-native-reanimated'
 
 function ListScreen(props) {
     const [showModal, setShowModal] = useState(false);
