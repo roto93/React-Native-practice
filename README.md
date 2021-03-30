@@ -1,4 +1,5 @@
 # Hahow-Hw
+react native 作業練習區
 
 # how to start
 `npm install -g expo-cli`
