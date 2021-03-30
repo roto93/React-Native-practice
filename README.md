@@ -1,11 +1,11 @@
 # Hahow-Hw
-react native 作業練習區
+我的 react native 作業練習區
 
 # how to start
 `npm install -g expo-cli`
 
 # clone repository
-`clone `
+`clone https://github.com/roto93/React-Native-practice.git`
 
 # rename the work you want
 
