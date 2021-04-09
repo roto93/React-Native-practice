@@ -34,8 +34,8 @@ next: '...',
 previous: '...',
 results:[
  {
-  name: 'xxx'
-  url: 'xxxxx'
+  name: 'xxx',
+  url: 'xxxxx',
  },
  
 }
