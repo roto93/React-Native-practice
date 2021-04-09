@@ -1,5 +1,10 @@
 我的 react native 作業練習區
 
+# TODO
+
+- [ ] Hw3~Hw7 README.md
+- [ ] Add demo video to each branch
+
 # 分支
 
 Hw3 : [簡易密碼判斷](https://github.com/roto93/React-Native-practice/tree/Hw3)
