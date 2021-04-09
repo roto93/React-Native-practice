@@ -1,4 +1,7 @@
-我的 react native 作業練習區
+# Practice: Pokemon API + My Favorites
+
+## Demo Video
+https://www.youtube.com/watch?v=HgyuOqKwaLQ
 
 # How to Start
 `npm install -g expo-cli`
