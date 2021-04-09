@@ -1,3 +1,12 @@
+/**
+ * 
+ * @param {string} type 
+ * @returns {object}
+ * {
+ * bgc: string
+ * tcolor: string
+ * }
+ */
 
 export const getTypeColor = (type) => {
     switch (type) {

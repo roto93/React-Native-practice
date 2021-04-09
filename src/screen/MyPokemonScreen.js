@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { ActivityIndicator, FlatList, StyleSheet, Text, View, Image } from 'react-native'
-import { useDispatch, useMappedState } from 'redux-react-hook'
-import * as Action from '../redux/action'
 import * as Storage from '../../StorageHelper'
 
 export default function MyPokemonScreen() {
@@ -10,6 +8,7 @@ export default function MyPokemonScreen() {
     const [pokeDetail, setPokeDetail] = useState({});
 
     const load = async () => {
+        setLoading(true)
         let myPokemonID
         const getID = async () => {
             myPokemonID = await Storage.getMySetting('myPokemon')
@@ -17,24 +16,23 @@ export default function MyPokemonScreen() {
             setIdSaved(myPokemonID)
             // idSaved在第一次渲染後才會變成從Storage讀取到的值
         }
-        if (!loading) setLoading(true)
-
         try {
-            console.log('start load')
+            // console.log('start load')
             await getID()
-            // await fetchPokemon(idSaved.list)
+            // Promise.all 會等陣列的每個元素都處理完再回傳
             const _pokeDetail = await Promise.all(
                 myPokemonID.list.map(async (id) => {
-                    return await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`).then(res => res.json()).catch(e => { console.log(e) })
+                    return await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)
+                        .then(res => res.json())
+                        .catch(e => { console.log(e) })
                 }),
             )
             setPokeDetail(_pokeDetail)
-            console.log('finish load')
+            // console.log('finish load')
+            setLoading(false)
         } catch (e) { console.log('fetchPokeList error: ' + e) }
-        setLoading(false)
     }
     useEffect(() => {
-
         load()
     }, [])
 
@@ -43,15 +41,13 @@ export default function MyPokemonScreen() {
             <View style={styles.pokemon_view}>
                 <Image
                     source={{ uri: item.sprites.front_default }}
-                    resizeMethod={'resize'}
-                    style={{ width: 80, height: 80 }}
-                />
+                    style={{ width: 80, height: 80 }} />
                 <Text>{item.name}</Text>
             </View>
         )
     }
 
-    if (loading) return (<ActivityIndicator color={'gray'} size={60} />)
+    if (loading) return <ActivityIndicator color={'gray'} size={60} />
     return (
         <View style={styles.container}>
             <View style={styles.poke_container}>
@@ -59,8 +55,7 @@ export default function MyPokemonScreen() {
                     data={pokeDetail}
                     renderItem={(cases) => renderPokemon(cases)}
                     keyExtractor={(cases, index) => index}
-                    numColumns={3}
-                />
+                    numColumns={3} />
             </View>
         </View>
     )

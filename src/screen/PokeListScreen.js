@@ -1,33 +1,30 @@
-import React, { useEffect, useState, memo } from 'react'
-import { StyleSheet, Text, View, FlatList, Button, TouchableOpacity, Image, ActivityIndicator, useWindowDimensions } from 'react-native'
-import PokeModal from '../component/PokeModal'
-import * as pokeFunc from '../component/pokeFunc'
-import { useDispatch, useMappedState } from 'redux-react-hook'
+import React, { useEffect, useState } from 'react'
+import { StyleSheet, Text, View, FlatList, TouchableOpacity, Image, ActivityIndicator, useWindowDimensions } from 'react-native'
 import * as Action from '../redux/action'
+import { useDispatch } from 'redux-react-hook'
 import * as Storage from '../../StorageHelper'
 import MDicon from 'react-native-vector-icons/MaterialIcons'
+import PokeModal from '../component/PokeModal'
+import * as pokeFunc from '../component/pokeFunc'
 
 
 export default function PokeList(props) {
-    const winX = useWindowDimensions().width
-    const [displayFrom, setDisplayFrom] = useState(0);
+    const winX = useWindowDimensions().width //手機畫面的寬
     const [listURI, setListURI] = useState('https://pokeapi.co/api/v2/pokemon/')
-    const [pokeList, setPokeList] = useState({}); //
-    const [loading, setLoading] = useState(true);
-    const [pokeDetail, setPokeDetail] = useState([]);
-    const [pokeModalID, setpokeModalID] = useState(0);
-    const [idSaved, setIdSaved] = useState({ list: [] });
+    const [pokeList, setPokeList] = useState({}); //取得列表 一次20個
+    const [displayFrom, setDisplayFrom] = useState(0); //這組列表是從編號第幾號開始抓20隻?
+    const [loading, setLoading] = useState(true); //讀取中
+    const [pokeDetail, setPokeDetail] = useState([]); //每隻神奇寶貝的資料
+    const [pokeModalID, setpokeModalID] = useState(0); //開啟modal時，要傳入的神奇寶貝編號
+    const [idSaved, setIdSaved] = useState({ list: [] }); //儲存已收藏的編號，結構選用物件可以確保即使陣列為空時也不會回傳false
 
     const dispatch = useDispatch()
-    const showPokeModal = useMappedState(state => state.showPokeModalReducer.showPokeModal)
     const setShowPokeModal = (bool) => { dispatch(Action.setShowPokeModal(bool)) }
     const setID = (obj) => { Storage.setMySetting('myPokemon', JSON.stringify(obj)) }
     const getID = async () => {
-        let myPokemonID = await Storage.getMySetting('myPokemon')
-        myPokemonID = JSON.parse(myPokemonID)
+        let myPokemonID = JSON.parse(await Storage.getMySetting('myPokemon'))
         setIdSaved(myPokemonID)
     }
-    const myAbortController = new AbortController();
     const fetchPokeList = async () => {
         try {
             setLoading(true)
@@ -45,12 +42,9 @@ export default function PokeList(props) {
     }
     useEffect(() => {
         fetchPokeList()
-        // return () => {
-        //     myAbortController.abort()
-        // }
     }, [listURI])
 
-    const RenderData = memo(({ item, index }) => {
+    const RenderData = ({ item, index }) => {
         let pokemonId = displayFrom + index + 1
         const onPokemonPress = () => {
             let arr = [...idSaved.list]
@@ -66,7 +60,6 @@ export default function PokeList(props) {
         return (
             <TouchableOpacity
                 style={[styles.card_view, { width: winX * 0.65, backgroundColor: idSaved.list.includes(pokemonId) ? '#E1E3FF' : '#D1F5FF' }]}
-                delayPressIn={0}
                 onLongPress={() => { setpokeModalID(index), setShowPokeModal(true) }}
                 onPress={onPokemonPress}
             >
@@ -83,7 +76,6 @@ export default function PokeList(props) {
                     </View>
                     <View style={styles.img_box}>
                         <Image source={{ uri: pokeDetail[index].sprites.front_default }}
-                            resizeMethod={'resize'}
                             style={{ width: 80, height: 80 }} />
                     </View>
                 </View>
@@ -91,11 +83,11 @@ export default function PokeList(props) {
             </TouchableOpacity>
 
         )
-    })
+    }
     const btnSize = winX * 0.18
     return (
         <View style={styles.container}>
-            <View style={{ height: '75%', width: '100%', alignItems: 'center', borderTopWidth: 2, borderBottomWidth: 2, justifyContent: 'center' }}>
+            <View style={styles.loading_view}>
                 {loading ?
                     <ActivityIndicator color={'gray'} size={60} />
                     :
@@ -120,15 +112,16 @@ export default function PokeList(props) {
                     </View>
                 }
             </View>
+            <View style={styles.row_btn}>
+                <TouchableOpacity style={styles.TO} onPress={() => { setID({ list: [] }); setIdSaved({ list: [] }) }}>
+                    <Text style={styles.t_TO}>Clear</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.TO} onPress={() => { props.navigation.navigate('MyPokemon') }}>
+                    <Text style={styles.t_TO}>See My Pokemon</Text>
+                </TouchableOpacity>
+            </View>
 
-            <TouchableOpacity style={styles.TO} onPress={() => { setID({ list: [] }); setIdSaved({ list: [] }) }}>
-                <Text style={styles.t_TO}>Clear</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.TO} onPress={() => { props.navigation.navigate('MyPokemon') }}>
-                <Text style={styles.t_TO}>See My Pokemon</Text>
-            </TouchableOpacity>
-
-            {loading || <PokeModal isVisible={showPokeModal} onDismiss={setShowPokeModal} pokeInfo={pokeDetail[pokeModalID]} pokeID={displayFrom + pokeModalID} />}
+            {loading || <PokeModal pokeInfo={pokeDetail[pokeModalID]} pokeID={displayFrom + pokeModalID} />}
         </View>
     )
 }
@@ -139,9 +132,16 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'center',
     },
+    loading_view: {
+        height: '75%',
+        width: '100%',
+        alignItems: 'center',
+        borderTopWidth: 2,
+        borderBottomWidth: 2,
+        justifyContent: 'center'
+    },
     card_view: {
         // borderWidth: 1,
-        // width: 'inline'
         height: 80,
         padding: 8,
         marginBottom: 8,
@@ -149,6 +149,12 @@ const styles = StyleSheet.create({
         elevation: 2
     },
     row_between: {
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    row_btn: {
+        width: '80%',
+        marginTop: 32,
         flexDirection: 'row',
         justifyContent: 'space-between'
     },
@@ -177,16 +183,17 @@ const styles = StyleSheet.create({
     TO: {
         // borderWidth: 1,
         borderRadius: 8,
-        width: 200,
+        width: 100,
         height: 50,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#D1F5FF',
+        backgroundColor: '#e1e1e1',
         marginTop: 8,
         elevation: 1,
 
     },
     t_TO: {
         fontSize: 16,
+        textAlign: 'center',
     }
 })

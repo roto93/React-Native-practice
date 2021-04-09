@@ -1,19 +1,23 @@
 import React from 'react'
 import { Image, StyleSheet, Text, View } from 'react-native'
+import { useDispatch, useMappedState } from 'redux-react-hook'
 import Modal from 'react-native-modal'
+import * as Action from '../redux/action'
 import * as pokeFunc from '../component/pokeFunc'
 
 
 export default function PokeModal(props) {
-    let showPokeModal = props.isVisible
-
+    const dispatch = useDispatch()
+    const showPokeModal = useMappedState(state => state.showPokeModalReducer.showPokeModal)
+    const setShowPokeModal = (bool) => { dispatch(Action.setShowPokeModal(bool)) }
     return (
         <Modal
             isVisible={showPokeModal}
-            useNativeDriver={true}
-            onBackdropPress={() => { props.onDismiss(false) }}
-            animationIn={'zoomIn'}
+            onBackdropPress={() => { setShowPokeModal(false) }}
+            onBackButtonPress={() => { setShowPokeModal(false) }}
             animationOut={'zoomOut'}
+            animationIn={'zoomIn'}
+            useNativeDriver={true}
             style={{ alignItems: 'center' }}
         >
             <View style={styles.modal_view}  >
@@ -40,10 +44,11 @@ const styles = StyleSheet.create({
     modal_view: {
         width: 250,
         height: 400,
-        backgroundColor: '#fff',
+        justifyContent: 'center',
         alignItems: 'center',
         paddingVertical: 20,
         borderRadius: 8,
+        backgroundColor: '#fff',
     },
     t_name: {
         fontSize: 24,
@@ -58,5 +63,6 @@ const styles = StyleSheet.create({
     },
     t: {
         fontSize: 16,
+        marginTop: 12,
     }
 })
