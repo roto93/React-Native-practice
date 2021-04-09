@@ -1,32 +1,55 @@
-//Hw 8
+// hw6 FlatList
 
-import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
-import { NavigationContainer } from '@react-navigation/native'
+import React, { useState } from 'react';
+import { StyleSheet, Text, TextInput, View, TouchableOpacity, Image, FlatList } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack'
-import PokeListScreen from './src/screen/PokeListScreen'
-import MyPokemonScreen from './src/screen/MyPokemonScreen'
-import store from './src/redux/store'
-import { StoreContext, useMappedState, useDispatch } from 'redux-react-hook'
-
-function Hw8() {
-    const Stack = createStackNavigator()
-    return (
-        <NavigationContainer>
-            <Stack.Navigator>
-                <Stack.Screen name={'PokeList'} component={PokeListScreen} />
-                <Stack.Screen name={'MyPokemon'} component={MyPokemonScreen} />
-            </Stack.Navigator>
-        </NavigationContainer>
-    )
-}
-
-const styles = StyleSheet.create({})
+import { NavigationContainer } from '@react-navigation/native'
+import ListScreen from './src/screen/ListScreen.js'
+import ListScreenStack from './src/screen/ListScreenStack'
 
 export default function App() {
+
+
+    const Stack = createStackNavigator()
+
     return (
-        <StoreContext.Provider value={store()}>
-            <Hw8 />
-        </StoreContext.Provider>
-    )
+        <NavigationContainer>
+            <Stack.Navigator
+                screenOptions={{ headerShown: true }}>
+                <Stack.Screen
+                    name={'List'} component={ListScreen}
+                    options={{
+                        headerStyle: styles.header,
+                        headerTitleAlign: 'center',
+                        headerTitleStyle: styles.headerTitle,
+                        headerTitle: '十二星座'
+                    }}
+                />
+                <Stack.Screen
+                    name={'ListStack'} component={ListScreenStack}
+                    options={{
+                        headerStyle: styles.header,
+                        headerTitle: '星座詳情',
+                        headerTitleStyle: styles.headerTitle,
+                    }}
+                />
+            </Stack.Navigator>
+        </NavigationContainer>
+    );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#FFE9F3',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    header: {
+        backgroundColor: '#9EB7E5',
+    },
+    headerTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+    }
+})
