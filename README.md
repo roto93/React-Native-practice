@@ -5,20 +5,21 @@
 
 2. clone repository
 
-`clone https://github.com/roto93/React-Native-practice.git`
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`clone https://github.com/roto93/React-Native-practice.git`
 
 3. rename the work you want
-For example, if you'd like to check Hw7.
 
-(macos):
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;For example, if you'd like to check Hw7.
 
-`mv Hw7.js App.js`
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(macos):
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`mv Hw7.js App.js`
 
 4. install & start
 
-`npm install`
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`npm install`
 
-`npm start -r`
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`npm start -r`
 
 ***
 
