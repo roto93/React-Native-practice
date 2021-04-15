@@ -41,7 +41,9 @@ results:[
 }
 ```
 
-一下是物件一下是陣列，要讀取細節還必須再fetch一次，調用的時候需要時時清楚 data 當時是什麼格式，不然如果其實 data 是 array，卻讀取 data.name 會跳 error，像老師之前說的 async await 真的需要花時間熟練，尤其是跟 setState 交互使用時會常常錯誤卻不知道為什麼。我覺得可能要多練習思考 life cycle，這樣之後在管理 promise、state、variable、useEffect 時才不會一直腦袋打結XD
+一下是物件一下是陣列，要讀取細節還必須再fetch一次，調用的時候需要時時清楚 data 當時是什麼格式，不然如果其實 data 是 array，卻讀取 data.name 會跳 error。
+
+另外老師之前說的 async await 真的需要花時間熟練，尤其是跟 setState 交互使用時會常常錯誤卻不知道為什麼。我覺得可能要多練習思考 life cycle，這樣之後在管理 promise、state、variable、useEffect 時才不會一直腦袋打結XD
 
 ### 2
 Flat list 的使用
